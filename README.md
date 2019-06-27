@@ -5,19 +5,19 @@ It should work on a Mac to type "make" and give it a try.  For Linux, change fau
 
 Model: N modes excited by up to M strikers
 
-Parameters:
+* Parameters:
 
- N = number of modes max
- M = number of strikers max (e.g., M=2 for two drum sticks)
+- N = number of modes max
+- M = number of strikers max (e.g., M=2 for two drum sticks)
  
- Modes:
-  fc
-  bw
-  g
+* Modes:
+-  fc
+-  bw
+-  g
 
- Strikers:
-  A = amplitude
-  D = duration = 1/bandwidth
+* Strikers:
+-  A = amplitude
+-  D = duration = 1/bandwidth
 
 Striker signal is presently a raised cosine, or maybe t e^{-t/D}, or maybe K x^p (piano hammer), or ?
 
