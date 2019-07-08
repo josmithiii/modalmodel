@@ -7,7 +7,7 @@ strikem.app: strikem.dsp
 
 data:
 	faust2sndfile strikem.dsp
-	strikem -nmodes 10 -duration 1 -f0 100 -gate 1 -level -6 -log10q 2 -o strikem_n10_d1_f100_Q2_stereo.wav
+	strikem -nmodes 10 -duration 1 -f0 100 -gate 1 -level -6 -log10q 2 strikem_n10_d1_f100_Q2_stereo.wav
 	sox strikem_n10_d1_f100_Q2_stereo.wav strikem_n10_d1_f100_Q2_mono.wav remix -
 	play strikem_n10_d1_f100_Q2_stereo.wav
 	echo say "audacity strikem_n10_d1_f100_Q2_mono.wav"
