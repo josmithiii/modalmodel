@@ -24,7 +24,7 @@ Q(i) = Q0;
 
 mode(i) = fi.resonbp(fc(i),Q(i),A(i));
 
-modes = par(i,NMAX,mode(i) : *(i>=N));
+modes = par(i,NMAX,mode(i) : *(i<N));
 
 pan2stereo(nIn,nActive) = si.bus(nIn) <: si.bus(2*nIn) : ro.interleave(nIn,2) :
 	     par(i,nIn,*(panGainLeft(i)),*(panGainRight(i))) :> _,_
