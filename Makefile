@@ -1,3 +1,4 @@
+# Interactive test app:
 all: strikem.app
 	-killall strikem
 	open strikem.app
@@ -5,6 +6,7 @@ all: strikem.app
 strikem.app: strikem.dsp
 	faust2caqt strikem.dsp
 
+# Generate data for training a synth model:
 data:
 	faust2sndfile strikem.dsp
 	strikem -nmodes 10 -duration 1 -f0 100 -gate 1 -level -6 -log10q 2 strikem_n10_d1_f100_Q2_stereo.wav
