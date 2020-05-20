@@ -13,12 +13,13 @@ rel = hslider("[5] Release (s)",1.0,0,10,0.001);
 
 amp = hslider("[6] Level (dB)", -10, -70, 10, 0.1) : sf.db2linear;
 frq = hslider("[7] Center Frequency (Hz)", 100, 20, 1000, 1);
-fsp = hslider("[8] Frequency Spacing (Hz)", 100, 20, 1000, 1); // Tie to F0?
+fac = hslider("[8] Frequency Spacing (factor)", 1, 0.1, 10, 0.01);
 rrr = hslider("[9] roll-off rate to the right (db/octave)", -6, -100, 0, 0.1);
 rrl = hslider("[10] roll-off rate to the left (db/octave)", -6, -100, 0, 0.1);
 
 A(i) = amp/float(i+1); // FIXME: use rrr and rrl
 
+fsp = frq * fac;
 fp(i) = frq+i*fsp;
 fm(i) = frq-i*fsp;
 fc(i) = select2(i>0,
