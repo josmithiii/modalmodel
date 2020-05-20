@@ -14,9 +14,9 @@ rel = hslider("[7] Release (s)",1.0,0,10,0.001);
 
 amp = hslider("[8] Level (dB)", -10, -70, 10, 0.1) : sf.db2linear;
 frq = hslider("[9] Center Frequency (Hz)", 100, 20, 1000, 1);
-fac = hslider("[10] Frequency Spacing (factor)", 1, 0.1, 10, 0.01);
-rrr = hslider("[11] roll-off rate to the right (db/octave)", -6, -100, 0, 0.1);
-rrl = hslider("[12] roll-off rate to the left (db/octave)", -6, -100, 0, 0.1);
+fac = hslider("[A] Frequency Spacing (factor)", 1, 0.1, 10, 0.01);
+rrr = hslider("[B] roll-off rate to the right (db/octave)", -6, -100, 0, 0.1);
+rrl = hslider("[C] roll-off rate to the left (db/octave)", -6, -100, 0, 0.1);
 
 Ar(i) = 2.0 ^ (float(-i)*rrr/6.02);
 Al(i) = 2.0 ^ (float(-i)*rrl/6.02);
@@ -28,4 +28,6 @@ model(i) = select2(fm(i)>0.0, 0.0, os.oscrs(fm(i)));
 modes = par(i,N,Ar(i)*moder(i)),
         par(i,N,Al(i)*model(i)) :> *(amp);
 
-process = en.adsr(att,dec,sus,rel,gate) * modes;
+envelope = en.adsr(att,dec,sus,rel,gate);
+
+process = envelope * modes <: _,_;
