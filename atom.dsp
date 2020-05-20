@@ -4,31 +4,28 @@ import("stdfaust.lib");
 
 N = 50; // number of components in both directions from center frequency
 
-gate = button("[0] Gate");
-dur = hslider("[1] Duration (s)",0.5,0,10,0.001);
-att = hslider("[2] Attack (s)",0.1,0,1,0.001);
-dec = hslider("[3] Decay (s)",0.1,0,1,0.001);
-sus = hslider("[4] Sustain (frac)",1.0,0,1,0.001);
-rel = hslider("[5] Release (s)",1.0,0,10,0.001);
+gate = button("[1] Gate");
+del = hslider("[2] Delay (s)",0,0,5,0.001);
+dur = hslider("[3] Duration (s)",0.5,0,10,0.001);
+att = hslider("[4] Attack (s)",0.1,0,1,0.001);
+dec = hslider("[5] Decay (s)",0.1,0,1,0.001);
+sus = hslider("[6] Sustain (frac)",1.0,0,1,0.001);
+rel = hslider("[7] Release (s)",1.0,0,10,0.001);
 
-amp = hslider("[6] Level (dB)", -10, -70, 10, 0.1) : sf.db2linear;
-frq = hslider("[7] Center Frequency (Hz)", 100, 20, 1000, 1);
-fac = hslider("[8] Frequency Spacing (factor)", 1, 0.1, 10, 0.01);
-rrr = hslider("[9] roll-off rate to the right (db/octave)", -6, -100, 0, 0.1);
-rrl = hslider("[10] roll-off rate to the left (db/octave)", -6, -100, 0, 0.1);
+amp = hslider("[8] Level (dB)", -10, -70, 10, 0.1) : sf.db2linear;
+frq = hslider("[9] Center Frequency (Hz)", 100, 20, 1000, 1);
+fac = hslider("[10] Frequency Spacing (factor)", 1, 0.1, 10, 0.01);
+rrr = hslider("[11] roll-off rate to the right (db/octave)", -6, -100, 0, 0.1);
+rrl = hslider("[12] roll-off rate to the left (db/octave)", -6, -100, 0, 0.1);
 
-A(i) = amp/float(i+1); // FIXME: use rrr and rrl
-
+Ar(i) = 2.0 ^ (float(-i)*rrr/6.02);
+Al(i) = 2.0 ^ (float(-i)*rrl/6.02);
 fsp = frq * fac;
 fp(i) = frq+i*fsp;
 fm(i) = frq-i*fsp;
-fc(i) = select2(i>0,
-           frq,
-           fp(i)+fm(i)-freq);
-modep(i) = select2(fp(i)<pl.SR/4.0, 0.0, os.oscrs(fp(i)));
-modem(i) = select2(fm(i)>0.0, 0.0, os.oscrs(fm(i)));
-modes = par(i,N,A(i)*modep(i)),
-        par(i,N,A(i)*modem(i)) :> _;
+moder(i) = select2(fp(i)<pl.SR/4.0, 0.0, os.oscrs(fp(i)));
+model(i) = select2(fm(i)>0.0, 0.0, os.oscrs(fm(i)));
+modes = par(i,N,Ar(i)*moder(i)),
+        par(i,N,Al(i)*model(i)) :> *(amp);
 
 process = en.adsr(att,dec,sus,rel,gate) * modes;
-
